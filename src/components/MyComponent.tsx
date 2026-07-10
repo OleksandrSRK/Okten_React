@@ -1,10 +1,9 @@
 import type {FC} from 'react';
-import styles from './MyComponent.module.css';
 
 type MyComponentPropType = {text: string};
 
 const MyComponent: FC<MyComponentPropType> = ({text}) => {
-    return <div className={styles.text_style}>{text}</div>
+    return <div className="text-3xl font-bold underline">{text}</div>
 }
 
 export default MyComponent;
