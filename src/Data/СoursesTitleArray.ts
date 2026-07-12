@@ -1,4 +1,4 @@
-let coursesTitleArray: string[] = [
+export const coursesTitleArray: string[] = [
     'JavaScript Complex',
     'Java Complex',
     'Python Complex',
