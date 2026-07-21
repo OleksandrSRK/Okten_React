@@ -1,0 +1,10 @@
+p{
+    width: 400px;
+}
+img{
+    width: 50%;
+    margin: auto;
+}
+.div-component{
+    border-bottom: black solid 1px;
+}
