@@ -1,3 +1,4 @@
+import './CoursesComponentStyle.css'
 import {CourseComponent} from '../item-course-component/CourseComponent.tsx'
 import {coursesArray} from '../../data/CoursesData.ts'
 

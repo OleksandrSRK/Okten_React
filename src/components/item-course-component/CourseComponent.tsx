@@ -1,3 +1,4 @@
+import './CourseComponentStyle.css'
 import type {ICurseModel} from "../../models/CurseModel.ts";
 
 export interface CourseComponentProps{
@@ -6,7 +7,7 @@ export interface CourseComponentProps{
 
 export const CourseComponent = ({course}: CourseComponentProps) => {
     return (
-        <div>
+        <div className="div-component">
             <h2>{course.title}</h2>
             <p>Month duration: {course.monthDuration}</p>
             <p>Hour duration: {course.hourDuration}</p>
