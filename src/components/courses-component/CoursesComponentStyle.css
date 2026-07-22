@@ -1,0 +1,7 @@
+div{
+    display: flex;
+    flex-direction: column;
+    width: 600px;
+    background: #eff9ff;
+    margin: 0 auto;
+}
