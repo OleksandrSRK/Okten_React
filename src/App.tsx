@@ -1,29 +1,12 @@
-import './App.css'
-import {useState} from 'react'
+import './App.css';
+import UsersComponent from "./components/users-component/UsersComponent.tsx";
 
 function App() {
 
-    // eslint-disable-next-line prefer-const
-    let [counter, setCounter] = useState<number>(0);
   return (
     <>
         <div>
-            <h2>{counter}</h2>
-            <button onClick={()=>{
-                console.log('+ ' + counter);
-                setCounter(++counter);
-            }}>
-                increment
-            </button>
-
-            <button onClick={()=>{
-                console.log('- ' + counter);
-                setCounter(prevState => {
-                    return prevState - 1;
-                });
-            }}>
-                decrement
-            </button>
+            <UsersComponent/>
         </div>
     </>
   )
