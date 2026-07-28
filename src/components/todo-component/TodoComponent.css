@@ -1,0 +1,8 @@
+.div-component{
+    border: black solid 1px;
+    margin: 5px 2px;
+    padding: 0 4px;
+}
+h2{
+    font-weight: bold;
+}
