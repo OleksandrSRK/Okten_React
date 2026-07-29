@@ -1,4 +1,4 @@
-import type {IComment} from "../ models/CommentModel.ts"
+import type {IComment} from "../models/CommentModel.ts"
 
 const endPoint = import.meta.env.VITE_API_URL;
 

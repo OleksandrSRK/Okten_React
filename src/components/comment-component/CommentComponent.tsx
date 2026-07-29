@@ -1,5 +1,5 @@
 import type {FC} from 'react';
-import type {IComment} from "../../ models/CommentModel.ts";
+import type {IComment} from "../../models/CommentModel.ts";
 import "./PostComponent.css"
 
 type CommentPropType = {
