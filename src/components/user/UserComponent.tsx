@@ -9,11 +9,12 @@ type UserTypeProps = {
 const UserComponent: FC<UserTypeProps> = ({item}) => {
     const navigate = useNavigate();
     const handleOnClick = () => {
-        navigate('details', {state: item});
+        navigate('posts/' + item.id, {state: item});
     };
     return (
         <div>
             <Link to={'details'} state={item}>{item.username}</Link>
+
             <button onClick={handleOnClick}>details</button>
         </div>
     );
