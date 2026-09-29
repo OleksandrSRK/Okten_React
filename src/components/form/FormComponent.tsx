@@ -13,8 +13,13 @@ const FormComponent = () => {
         resolver: joiResolver(carValidator)
     });
 
-    const createHandle = (data: ICar) => {
-        addCar(data);
+    const createHandle = async (data: ICar) => {
+        try {
+            await addCar(data);
+        } catch (e) {
+            console.error(e);
+            alert('Failed to add car');
+        }
     }
 
     return (
