@@ -2,11 +2,11 @@ import './App.css'
 
 function App() {
 
-  return (
-    <>
-        App Page
-    </>
-  )
+    return (
+        <>
+            App Page
+        </>
+    )
 }
 
 export default App
