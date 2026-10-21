@@ -1,9 +1,12 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import UserComponent from "./UserComponent.tsx";
+import {useFetch} from "../hooks/useFetch.tsx";
 
 const UsersComponent = () => {
 
     console.log('users c');
+
+    const users = useFetch();
 
     const arr: number[] = useMemo(() => {
         return [11, 22, 33]
@@ -13,17 +16,13 @@ const UsersComponent = () => {
         console.log('test')
     },[])
 
-    const [users, setUsers] = useState([]);
-    useEffect(() => {
-        fetch('https://jsonplaceholder.typicode.com/users')
-            .then(value => value.json())
-            .then(value => {setUsers(value)})
-    }, []);
 
     return (
         <div>
             users Component
-            <UserComponent foo={foo} arr={arr}/>
+            {
+                users.map(value => <UserComponent item={value} foo={foo} arr={arr}/>)
+            }
         </div>
     );
 };
