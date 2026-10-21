@@ -1,10 +1,13 @@
 import './App.css'
+import UsersComponent from "./components/UsersComponent.tsx";
 
 function App() {
 
+    console.log('app');
+
   return (
     <>
-        App Page Lesson #7
+        <UsersComponent/>
     </>
   )
 }

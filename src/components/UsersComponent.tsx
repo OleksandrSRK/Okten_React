@@ -1,0 +1,27 @@
+import React, {useCallback, useEffect, useState} from 'react';
+import UserComponent from "./UserComponent.tsx";
+
+const UsersComponent = () => {
+
+    console.log('users c');
+
+    const foo = useCallback(() => {
+        console.log('test')
+    },[])
+
+    const [users, setUsers] = useState([]);
+    useEffect(() => {
+        fetch('https://jsonplaceholder.typicode.com/users')
+            .then(value => value.json())
+            .then(value => {setUsers(value)})
+    }, []);
+
+    return (
+        <div>
+            users Component
+            <UserComponent foo={foo}/>
+        </div>
+    );
+};
+
+export default UsersComponent;
