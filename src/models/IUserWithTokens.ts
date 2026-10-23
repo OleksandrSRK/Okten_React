@@ -1,3 +1,4 @@
+// описує поля користувача і токени з відповіді dummyjson на запит логіну
 export interface IUserWithTokens {
 	firstName: string;
 	lastName: string;

@@ -1,3 +1,4 @@
+// описує один продукт з масиву який повертає dummyjson
 export interface IProducts {
 	images: string[];
 	thumbnail: string;
@@ -23,6 +24,7 @@ export interface IProducts {
     meta: IMeta;
 }
 
+// описує вкладені метадані продукту
 export interface IMeta {
 	createdAt: string;
 	qrCode: string;
@@ -30,7 +32,7 @@ export interface IMeta {
 	updatedAt: string;
 }
 
-
+// описує відгук про продукт
 export interface IReviews {
 	date: string;
 	reviewerName: string;
@@ -39,7 +41,7 @@ export interface IReviews {
 	comment: string;
 }
 
-
+// описує розміри продукту
 export interface IDimensions {
 	depth: number;
 	width: number;

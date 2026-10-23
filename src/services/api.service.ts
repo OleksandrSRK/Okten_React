@@ -12,55 +12,80 @@ type LoginData = {
     expiresInMins: number,
 }
 
-const axiosInstance = axios.create({ // створюється екземпляр axios
+// спільний екземпляр axios додає цю базову адресу до шляхів запитів нижче.
+const axiosInstance = axios.create({
     baseURL: "https://dummyjson.com/auth", // базова URL для всіх HTTP-запитів
-    headers: {} // заголовки HTTP-запитів (пусто)
+    headers: {} // спільні заголовки для всіх HTTP-запитів (пусто)
 });
 
 
-// перехоплення всіх запитів
+// інтерцептор обробляє кожен запит але accessToken додаємо лише до GET-запитів
+// для логіну сервер отримує username і password а для оновлення токенів refreshToken у тілі POST-запиту
 axiosInstance.interceptors.request.use((requestObject) => {
 
-    // беремо від requestObject метод який він використовує (на всякий випадок приводимо до UpperCase)
-    // якщо це GET запит то в requestObject в розділ з headers додаємо header Authorization
-    // який дорівнює Bearer + беремо (за допомогою retriveLocalStorage) accessToken з локального сховища типу IUserWithTokens
+    // if перевіряє чи це GET-запит
+    // method може бути відсутнім і тоді ?. пропускає виклик toUpperCase() умова не спрацьовує і Authorization не додається
     if (requestObject.method?.toUpperCase() === 'GET') {
+
+        // додаємо до захищеного GET-запиту заголовок Authorization у форматі 'Bearer ' + <токен>
+        // accessToken беремо зі збережених у localStorage даних користувача.
         requestObject.headers.Authorization = 'Bearer ' + retriveLocalStorage<IUserWithTokens>('user').accessToken
     }
-    return requestObject; // повертаємо requestObject
+
+    /*
+        Пояснення чому accessToken додаєм тільки до GET-запиту:
+            ми додаємо accessToken лише до GET-запиту бо він повертає захищені дані
+            до яких доступ надається тільки після реєстрації/логіну (відповідно після отримання токену)
+
+            в той час як POST /login лише відправляє на сервер username і password
+            а POST /refresh передає refreshToken у тілі запиту для отримання нової пари токенів
+     */
+
+    return requestObject; // повертаємо оновлену конфігурацію axios з доданим заголовком щоб він міг продовжити надсилання запиту
 
 })
 
-// асинхронна функція login яка приймає об'єкт LoginData та обіцяє повернення об'єкту типу IUserWithTokens
+// приймає об'єкт LoginData і дістає з нього username, password та expiresInMins
+// після виконання функція повертає дані користувача разом із токенами
 export const login = async ({username, password, expiresInMins}: LoginData): Promise<IUserWithTokens> => {
 
     // post запит який відправляє дані юзера на URL https://dummyjson.com/auth/login
     // та повертає відповідь userWithTokens з даними користувача та токенами
+    // <IUserWithTokens> задає очікуваний тип response.data для TypeScript
+    // data: userWithTokens дістає поле data з відповіді Axios і дає йому локальне ім'я userWithTokens
     const {data: userWithTokens} = await axiosInstance.post<IUserWithTokens>('/login', {username, password, expiresInMins})
 
     console.log(userWithTokens); // виведення даних користувача та токенів
-    localStorage.setItem('user', JSON.stringify(userWithTokens)); // зберігання токенів в локальне сховище
+
+    // localStorage зберігає рядки тому JSON.stringify перетворює весь об'єкт користувача з токенами на JSON рядок
+    // та зберігаєм токени в локальне сховище
+    localStorage.setItem('user', JSON.stringify(userWithTokens));
+
     return userWithTokens; // повертає дані користувача з токенами
 }
 
-// асинхронна функція loadAuthProducts яка обіцяє повернення об'єкту типу IProducts[]
+// асинхронна функція завантажує продукти й повертає їхній масив
 export const loadAuthProducts = async (): Promise<IProducts[]> => {
 
-    // get запит який повертає компонент типу IProductsResponseModelType з URL https://dummyjson.com/auth/products
-    // та деструктурує products з data
-    const {data: {products}} = await axiosInstance.get<IProductsResponseModelType>('/products', {})
-    return products; // повертає products
+    // спочатку дістаємо data з відповіді axios
+    // тип задає форму тіла відповіді сервера
+    const {data} = await axiosInstance.get<IProductsResponseModelType>('/products', {})
+
+    // потім із тіла відповіді дістаємо масив products
+    const {products} = data
+
+    return products; // повертає масив продуктів
 }
 
-// асинхронна функція refresh
+// асинхронна функція оновлює токени використовуючи refreshToken зі збережених даних користувача
 export const refresh = async () => {
 
     // дістаєм з локального сховища дані користувача з токенами
     const iUserWithTokens = retriveLocalStorage<IUserWithTokens>('user');
 
-    // постовий запит на URL https://dummyjson.com/auth/refresh
-    // та передаєм поточний refreshToken та час дії нового accessToken
-    // після чого деструктуруєм данні на accessToken та refreshToken
+    // надсилаємо refreshToken щоб отримати нову пару токенів
+    // <ITokenPair> описує очікувані поля відповіді
+    // з data дістаємо обидва токени.
     const {data: {accessToken, refreshToken}} = await axiosInstance.post<ITokenPair>('/refresh', {
         refreshToken: iUserWithTokens.refreshToken,
         expiresInMins: 1
@@ -70,7 +95,7 @@ export const refresh = async () => {
     iUserWithTokens.accessToken = accessToken;
     iUserWithTokens.refreshToken = refreshToken;
 
-    localStorage.setItem('user', JSON.stringify(iUserWithTokens)); // зберігаємо оновленого користувача з новими токенами
+    localStorage.setItem('user', JSON.stringify(iUserWithTokens)); // зберігаємо оновлені дані користувача як JSON-рядок
 }
 
 
