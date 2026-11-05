@@ -1,0 +1,18 @@
+* {
+padding: 0;
+margin: 0;
+}
+
+.light {
+    min-height: 100vh;
+    padding: 16px;
+    background: white;
+    color: #222;
+}
+
+.dark {
+    min-height: 100vh;
+    padding: 16px;
+    background: #222;
+    color: white;
+}
